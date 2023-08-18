@@ -27,13 +27,38 @@ const Content = (props) => {
         }
     };
 
+    const [cases, setCase] = useState();
+    const [descriptions, setDescriptions] = useState();
+
+    useEffect(() => {
+        fetch('/get_cases')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(data => {
+                setCase(data.cases);
+                setDescriptions(data.descriptions);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+      }, []);
+
+      console.log(cases);
+      console.log(descriptions);
+
+      
+
     
     return (
         <main className="Content">
             <div className="card">
                 <h5 className="card-header">You will rate the understandability and severity of the following case:</h5>
                 <div className="card-body">
-                    <h5 className="card-text case"> {props.question_number + ".   "} "{props.case}" </h5>
+                    <h5 className="card-text case"> {props.question_number + ".   "} "{cases ? cases[props.question_number] : "Loading..."}" </h5>
                     <p className="d-inline-flex gap-1">
                         <a onClick={handleClickDescription} className="btn btn-sm btn-light" data-bs-toggle="collapse" href={"#collapseDescription-"+props.question_number} role="button" aria-expanded="false" aria-controls={"collapseDescription-"+props.question_number}>
                             See Description
@@ -45,7 +70,7 @@ const Content = (props) => {
                     </p>
                     <div className="collapse" id={"collapseDescription-"+props.question_number}>
                         <div class="card card-body">
-                            {props.description}
+                            {descriptions ? descriptions[props.question_number] : "Loading..."}
                         </div>
                     </div>
                     <div className='question-body'>

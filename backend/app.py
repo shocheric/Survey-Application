@@ -8,6 +8,7 @@ import uuid
 import json
 from flask_sqlalchemy import SQLAlchemy, query
 from sqlalchemy import select, func
+import random
 
 
 # App creation and db definition
@@ -64,8 +65,8 @@ def add_user():
 # route for testing
 @app.route('/test', methods=['GET'])
 def test():
-    #rand_case = db.session.execute(select(CaseList).where(CaseList.case_id == "2")).scalar()
-    rand_case = db.session.query(CaseList).order_by(func.random()).limit(5)
+    rand_case = db.session.execute(select(CaseList).where(CaseList.case_id == "2")).scalar()
+    #rand_case = db.session.query(CaseList).order_by(func.random()).limit(5)
     return jsonify({"test":rand_case.case})
 
 # defines a route for retrieving a case
@@ -84,14 +85,15 @@ def get_cases():
             descriptions.append(rand_case.description)
             selected_case_ids.append(rand_case.case_id)
 
-    json_cases = json.dumps(cases)
-    json_descriptions = json.dumps(descriptions)
-    rewrite = random.choice(cases)
+    randInt = random.randint(0,len(cases))
+    rewrite = cases[randInt]
+    rewrite_desc = descriptions[randInt]
 
     return jsonify({
-        "cases": json_cases,
-        "descriptions": json_descriptions,
-        "rewrite": rewrite
+        "cases": cases,
+        "descriptions": descriptions,
+        "rewrite": rewrite,
+        "rewrite_desc":rewrite_desc
     })
 
 

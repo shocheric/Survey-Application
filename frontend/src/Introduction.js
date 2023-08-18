@@ -34,8 +34,6 @@ const Introduction = () => {
     return (
         <main className="Content">
             <div className="card">
-                <h5 className="card-header">Test: </h5>
-                
                 <h5 className="card-header">Before you start:</h5>
                 <div className="card-body">
                     <div className='card-section'>
