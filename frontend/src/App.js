@@ -82,7 +82,7 @@ const selectCases = (lines) => {
   const used = [];
   let i = 0;
 
-  while (i < lines.length) {
+  while (i < max_cases) {
     let randInt = Math.floor(Math.random() * lines.length);
     if (!used.includes(randInt)) {
       cases.push(<Content case={lines[randInt]} description={descriptions[randInt]} question_number={i+1}/>);
