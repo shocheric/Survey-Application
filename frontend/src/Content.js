@@ -1,6 +1,5 @@
 import Radio from './Radio';
-import { useState, useEffect, useMemo, useRef } from 'react';
-import Thankyou from './Thankyou';
+import { useState} from 'react';
 import React from 'react';
 
 
@@ -15,7 +14,7 @@ const Content = (props) => {
     const [toggled, setToggled] = useState(false);
     // function to rotate toggle arrow when clicked
     const handleClickDescription = () => {
-        const toggle = document.getElementById("bi-toggle-"+props.question_number);
+        const toggle = document.getElementById("bi-toggle-"+props.questionNumber);
         if (toggled) {
             toggle.style.transform = "rotate(0deg)";
             setToggled(false);
@@ -33,19 +32,19 @@ const Content = (props) => {
             <div className="card">
                 <h5 className="card-header">You will rate the understandability and severity of the following case:</h5>
                 <div className="card-body">
-                    <h5 className="card-text case"> {props.question_number + ".   "} "{props.case}" </h5>
+                    <h5 className="card-text case"> {props.questionNumber + ".   "} {props.case ? '"'+props.case+'"' : "Loading..."} </h5>
                     <p className="d-inline-flex gap-1">
-                        <a onClick={handleClickDescription} className="btn btn-sm btn-light" data-bs-toggle="collapse" href={"#collapseDescription-"+props.question_number} role="button" aria-expanded="false" aria-controls={"collapseDescription-"+props.question_number}>
+                        <a onClick={handleClickDescription} className="btn btn-sm btn-light" data-bs-toggle="collapse" href={"#collapseDescription-"+props.questionNumber} role="button" aria-expanded="false" aria-controls={"collapseDescription-"+props.questionNumber}>
                             See Description
-                            <svg active="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16" id={"bi-toggle-"+props.question_number}>
+                            <svg active="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16" id={"bi-toggle-"+props.questionNumber}>
                             <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
                             </svg>
                         </a>
                         
                     </p>
-                    <div className="collapse" id={"collapseDescription-"+props.question_number}>
+                    <div className="collapse" id={"collapseDescription-"+props.questionNumber}>
                         <div class="card card-body">
-                            {props.description}
+                            {props.caseDescription ? props.caseDescription : "Loading..."}
                         </div>
                     </div>
                     <div className='question-body'>

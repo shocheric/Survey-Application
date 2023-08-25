@@ -1,7 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
 import { useState } from 'react';
-import NextButton from './NextButton';
 
 const Rewrite = (props) => {
     // set toggle to false by default
@@ -25,7 +23,7 @@ const Rewrite = (props) => {
             <div className="card">
                 <h5 className="card-header">You will rewrite the following case in your own words:</h5>
                 <div className="card-body">
-                    <h5 className="card-text case"> "{props.case}" </h5>
+                    <h5 className="card-text case"> {props.case ? '"'+props.case+'"' : "Loading..."} </h5>
                     <p className="d-inline-flex gap-1">
                         <a onClick={handleClickDescription} className="btn btn-sm btn-light" data-bs-toggle="collapse" href={"#collapseDescription"} role="button" aria-expanded="false" aria-controls={"collapseDescription"}>
                             See Description

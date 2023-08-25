@@ -79,19 +79,21 @@ def get_cases():
     for i in range(max_cases):
         rand_case = db.session.query(CaseList).filter(CaseList.case_id.notin_(selected_case_ids)).order_by(func.random()).first()
         
+        # append cases and descriptions to lists. Indices correspond to linked case/desc
         if rand_case:
             cases.append(rand_case.case)
             descriptions.append(rand_case.description)
             selected_case_ids.append(rand_case.case_id)
 
-    json_cases = json.dumps(cases)
-    json_descriptions = json.dumps(descriptions)
-    rewrite = random.choice(cases)
+    # choose a random case from the list to be the rewrite
+    randInt = random.randrange(0, max_cases - 1)
+    rewrite = [cases[randInt], descriptions[randInt]]
 
     return jsonify({
-        "cases": json_cases,
-        "descriptions": json_descriptions,
-        "rewrite": rewrite
+        "cases": cases,                # [case1, case2,...,casen]
+        "descriptions": descriptions,  # [desc1, desc2,...,descn]
+        "rewrite": rewrite,            # [case, desc]
+        "max_cases": max_cases         # so we just have to change in one place
     })
 
 
