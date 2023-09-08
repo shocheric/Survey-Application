@@ -43,16 +43,15 @@ function App() {
             return res.json();
         })
         .then(data => {
-            if (!initialCases) {
-              sessionStorage.setItem('cases', JSON.stringify(data.cases));
-              sessionStorage.setItem('descriptions', JSON.stringify(data.descriptions));
-              sessionStorage.setItem('rewrite', JSON.stringify(data.rewrite));
+            console.log('Fetched Data: ' + data.cases);
+            sessionStorage.setItem('cases', JSON.stringify(data.cases));
+            sessionStorage.setItem('descriptions', JSON.stringify(data.descriptions));
+            sessionStorage.setItem('rewrite', JSON.stringify(data.rewrite));
 
-              setCases(data.cases);
-              setDescriptions(data.descriptions);
-              setRewrite(data.rewrite);
-              setMaxCases(data.max_cases);
-            }
+            setCases(data.cases);
+            setDescriptions(data.descriptions);
+            setRewrite(data.rewrite);
+            setMaxCases(data.max_cases);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -66,10 +65,13 @@ function App() {
   const thankyou = <Thankyou />
   const caseComponents = [];
   
-  for (let i=0; i<maxCases; i++) {
-    let newCase = <Content questionNumber={i+1} case={cases[i]} caseDescription={descriptions[i]}/>;
-    caseComponents.push(newCase);
+  if (cases.length === maxCases && descriptions.length === maxCases) {
+    for (let i=0; i<maxCases; i++) {
+      let newCase = <Content key={i} questionNumber={i+1} case={cases[i]} caseDescription={descriptions[i]}/>;
+      caseComponents.push(newCase);
+    }
   }
+
 
   return <Routes>
     <Route path="/" element={surveyPage(boiler, "/survey")} />

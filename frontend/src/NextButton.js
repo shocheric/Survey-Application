@@ -3,22 +3,13 @@ import {Link} from "react-router-dom";
 
 
 
-// will add a new user if it is the first next button
-/*
-const handleNextButtonClick = (route) => {
-    if (route == "/survey") {
-        fetch('/backend/app/add_user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-    }
-}
-*/
-
-
 const NextButton = (props) => {
+    // check if last next button to call the end_session route and log out user automatically
+    if (props.route === "/thankyou") {
+        fetch('/end_session')
+        console.log("Route called successfully")
+    }
+
     return (
         <button className='btn btn-large btn-primary next-btn'><Link to={props.route}>Next</Link></button>
     );
