@@ -51,10 +51,12 @@ const Content = (props) => {
                         <h2 className="question">a. { question1 } </h2>
                         <Radio 
                             question_type={"a"}
+                            questionNumber={props.questionNumber}
                         />
                         <h2 className="question">b. { question2 } </h2>
                         <Radio
                             question_type={"b"}
+                            questionNumber={props.questionNumber}
                         />
                     </div>
                 </div>

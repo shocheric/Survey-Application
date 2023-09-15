@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Radio = ({ question_type }) => {
+const Radio = (props) => {
 
     // define selection variable using state
     const[rating, setRating] = useState("Not Selected")
@@ -8,11 +8,11 @@ const Radio = ({ question_type }) => {
     // on change handler to update users selection
     const onSelect = e => {
         setRating(e.target.value)
-        console.log("Rating changed to: " + e.target.value + " for " + e.target.name)
+        console.log("Rating changed to: " + e.target.value + "\nFor: " + e.target.name + "\nQuestion: " + props.questionNumber)
     }
 
     var name;
-    if (question_type === "a") {
+    if (props.question_type === "a") {
         name = "understandability";
     } else {
         name = "severity";
@@ -20,11 +20,11 @@ const Radio = ({ question_type }) => {
     return (
         <div className="radio-group">
             <div className="scale-labels">
-                <h1>{ question_type==="a" ? "Extremely unclear" : "Extremely severe"}</h1>
+                <h1>{ props.question_type==="a" ? "Extremely unclear" : "Extremely severe"}</h1>
                 
-                <h1 className="middle-label">{ question_type==="a" ? "Neither clear nor unclear" : "Indifferent"}</h1>
+                <h1 className="middle-label">{ props.question_type==="a" ? "Neither clear nor unclear" : "Indifferent"}</h1>
                 
-                <h1>{ question_type==="a" ? "Extremely clear" : "Not severe at all"}</h1>
+                <h1>{ props.question_type==="a" ? "Extremely clear" : "Not severe at all"}</h1>
             </div>
 
             
