@@ -10,14 +10,17 @@ from flask_sqlalchemy import SQLAlchemy, query
 from sqlalchemy import select, func
 
 
+
 # App creation and db definition
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.secret_key = 'Seriously Explainable AI @ PSU'
-
+# App configs. First db then session
 app.config['SQLALCHEMY_DATABASE_URI'] =\
            'sqlite:///' + os.path.join(basedir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_TYPE'] = "filesystem"
 
 db.init_app(app)
 
@@ -46,21 +49,6 @@ with app.app_context():
 
 '''ROUTE DEFINITIONS'''
 
-"""# defines a route for logging a user after they press the first "Next" button
-@app.route('/add_user', methods=['POST'])
-def add_user():
-    new_user_id = uuid.uuid4()
-    rewrite_id = generate_cases()
-    rewrite = query_db("SELECT case FROM CaseList WHERE case_id = ?", (rewrite_id))
-    new_user = Input(new_user_id, rewrite_id, rewrite)
-    # add user
-    db.session.add(new_user)
-    db.session.commit()
-
-    session['id'] = new_user_id
-
-    return 'User added successfully'"""
-
 # route for testing
 @app.route('/test', methods=['GET'])
 def test():
@@ -68,33 +56,48 @@ def test():
     rand_case = db.session.query(CaseList).order_by(func.random()).limit(5)
     return jsonify({"test":rand_case.case})
 
+
+
 # defines a route for retrieving a case
 @app.route('/get_cases', methods=['GET'])
 def get_cases():
-    selected_case_ids = []
-    
-    cases = []
-    descriptions = []
-    
-    for i in range(max_cases):
-        rand_case = db.session.query(CaseList).filter(CaseList.case_id.notin_(selected_case_ids)).order_by(func.random()).first()
+    # if statement to test user session
+    if "user" not in session:
+        session.permanent = False
+        session["user"] = uuid.uuid4()
+        print("User is now in Session".upper())
+        print("SessionID: " + str(session["user"]))
+
+        selected_case_ids = []
+        cases = []
+        descriptions = []
         
-        # append cases and descriptions to lists. Indices correspond to linked case/desc
-        if rand_case:
-            cases.append(rand_case.case)
-            descriptions.append(rand_case.description)
-            selected_case_ids.append(rand_case.case_id)
+        for i in range(max_cases):
+            rand_case = db.session.query(CaseList).filter(CaseList.case_id.notin_(selected_case_ids)).order_by(func.random()).first()
+            
+            # append cases and descriptions to lists. Indices correspond to linked case/desc
+            if rand_case:
+                cases.append(rand_case.case)
+                descriptions.append(rand_case.description)
+                selected_case_ids.append(rand_case.case_id)
 
-    # choose a random case from the list to be the rewrite
-    randInt = random.randrange(0, max_cases - 1)
-    rewrite = [cases[randInt], descriptions[randInt]]
+        # choose a random case from the list to be the rewrite
+        randInt = random.randrange(0, max_cases - 1)
+        rewrite = [cases[randInt], descriptions[randInt]]
+    else:
+        print("User is in session".upper())
+        print(session["user"])
 
-    return jsonify({
-        "cases": cases,                # [case1, case2,...,casen]
-        "descriptions": descriptions,  # [desc1, desc2,...,descn]
-        "rewrite": rewrite,            # [case, desc]
-        "max_cases": max_cases         # so we just have to change in one place
-    })
+    try:
+        return jsonify({
+            "cases": cases,                # [case1, case2,...,casen]
+            "descriptions": descriptions,  # [desc1, desc2,...,descn]
+            "rewrite": rewrite,            # [case, desc]
+            "max_cases": max_cases         # so we just have to change in one place
+        })
+    
+    except:
+        return "Error returning cases"
 
 
 # defines a route for adding response information
@@ -105,12 +108,14 @@ def add_response():
     """complete"""
 
 
-"""# defines a route for removing a user session
+# defines a route for removing a user session
 @app.route('/end_session', methods=['GET', 'POST'])
 def end_session():
-    session.pop('id')
+    if "user" in session:
+        session.pop("user")
+        print("SESSION ENDED SUCCESSFULLY")
 
-    return 'session ended successfully'"""
+    return 'session ended successfully'
 
 
 """Methods"""
