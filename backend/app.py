@@ -65,7 +65,7 @@ def get_cases():
     if "user" not in session:
         session.permanent = False
         session["user"] = uuid.uuid4()
-        print("User is now in Session".upper())
+        print("Session started successfully".upper())
         print("SessionID: " + str(session["user"]))
 
         selected_case_ids = []
@@ -85,7 +85,7 @@ def get_cases():
         randInt = random.randrange(0, max_cases - 1)
         rewrite = [cases[randInt], descriptions[randInt]]
     else:
-        print("User is in session".upper())
+        print("User is already in session".upper())
         print(session["user"])
 
     try:
@@ -106,6 +106,22 @@ def add_response():
     response_data = request.get_json()
     new_response = Input()
     """complete"""
+
+
+@app.route('/log_time', methods=['POST'])
+def log_time():
+    time_data = request.get_json()
+    print("TIME DATA: "+str(time_data))
+    csv_insert = [session['user'], str(time_data)]
+    print(csv_insert)
+
+    # write data to csv
+    with open('time_test.csv', 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(csv_insert)
+    file.close()
+
+    return 'time logged successfully'
 
 
 # defines a route for removing a user session
