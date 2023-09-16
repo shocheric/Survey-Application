@@ -1,10 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const Thankyou = () => {
+const Thankyou = (props) => {
     const thanks = "Thank you for your participation!";
     const compensationCode = "*Insert Code*";
     const compensationDirections = "Use this code on *website* to redeem your payment. Email *email* if you have issues.";
     const sendoff = "Your responses have been collected. You may now close this window."
+
+
+    useEffect(() => {
+        // Call log_time route to insert time into a csv and end_session route to stop the user's session
+        fetch("/log_time", {
+            method: "POST",
+            headers: {
+            'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(props.count)
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Error logging time');
+                }
+                console.log("Time logged successfully");
+
+                return fetch('/end_session')
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error ending session");
+                }
+                console.log("Session ended successfully")
+            })
+            .catch(error => {
+                console.error('Error', error)
+            });
+        }, []);
+
     return (
         <main className="Content">
             <div className="card" id="conclusion-card">

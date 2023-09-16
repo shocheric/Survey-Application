@@ -9,7 +9,6 @@ import Rewrite from './Rewrite';
 import Introduction from './Introduction';
 import React, {useState, useEffect} from 'react';
 
-
 const surveyPage = (body, nextRoute) => (
   <div className="App">
         <Header />
@@ -23,7 +22,25 @@ const surveyPage = (body, nextRoute) => (
     </div>
 )
 
+
 function App() {
+
+  // start count
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+
+    //Implement setInterval method
+    const interval = setInterval(() => {
+      setCount(count + 1);
+      console.log(count);
+    }, 1000);
+
+    //Clearing interval
+    return () => clearInterval(interval);
+  }, [count]);
+
+
   // get values from session storage
   const initialCases = JSON.parse(sessionStorage.getItem('cases')) || [];
   const initialDescriptions = JSON.parse(sessionStorage.getItem('descriptions')) || [];
@@ -62,7 +79,7 @@ function App() {
   // Set pages and pass props to them
   const rewriteComponent = <Rewrite case={rewrite[0]} description={rewrite[1]} />;
   const boiler = <Introduction />
-  const thankyou = <Thankyou />
+  const thankyou = <Thankyou count={count}/>
   const caseComponents = [];
   
   if (cases.length === maxCases && descriptions.length === maxCases) {
@@ -74,10 +91,10 @@ function App() {
 
 
   return <Routes>
-    <Route path="/" element={surveyPage(boiler, "/survey")} />
-    <Route path="/survey" element={surveyPage(caseComponents, "/rewrite")} />
-    <Route path="/rewrite" element={surveyPage(rewriteComponent, "/thankyou")} />
-    <Route path="/thankyou" element={surveyPage(thankyou)} />
+    <Route exact path="/" element={surveyPage(boiler, "/survey")} />
+    <Route exact path="/survey" element={surveyPage(caseComponents, "/rewrite")} />
+    <Route exact path="/rewrite" element={surveyPage(rewriteComponent, "/thankyou")} />
+    <Route exact path="/thankyou" element={surveyPage(thankyou)} />
   </Routes>
 }
 
