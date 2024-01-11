@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, jsonify, session
 import csv
 import random
-from models import db, CaseList, Input, CompensationCodes
+from models import db, CaseList, UserInput, Ratings, CompensationCodes
 from models import max_cases
 import uuid
 import json
@@ -56,8 +56,6 @@ def test():
     rand_case = db.session.query(CaseList).order_by(func.random()).limit(5)
     return jsonify({"test":rand_case.case})
 
-
-
 # defines a route for retrieving a case
 @app.route('/get_cases', methods=['GET'])
 def get_cases():
@@ -84,9 +82,21 @@ def get_cases():
         # choose a random case from the list to be the rewrite
         randInt = random.randrange(0, max_cases - 1)
         rewrite = [cases[randInt], descriptions[randInt]]
+
+        # Save data to session storage
+        session['cases'] = cases
+        session['descriptions'] = descriptions
+        session['rewrite'] = rewrite
+
     else:
+        # get values from session storage
+        cases = session.get('cases')
+        descriptions = session.get('descriptions')
+        rewrite = session.get('rewrite')
+
         print("User is already in session".upper())
         print(session["user"])
+        print(f"cases: {cases}")
 
     try:
         return jsonify({
@@ -96,7 +106,8 @@ def get_cases():
             "max_cases": max_cases         # so we just have to change in one place
         })
     
-    except:
+    except Exception as e:
+        print("Error returning cases: {e}".upper())
         return "Error returning cases"
 
 

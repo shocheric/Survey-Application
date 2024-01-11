@@ -25,6 +25,7 @@ const Content = (props) => {
             setToggled(true);
         }
     };
+
     
     
     return (

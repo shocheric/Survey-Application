@@ -8,20 +8,22 @@ const Thankyou = (props) => {
 
 
     useEffect(() => {
+        const abortController = new AbortController();
         // Call log_time route to insert time into a csv and end_session route to stop the user's session
         fetch("/log_time", {
             method: "POST",
             headers: {
             'Content-Type' : 'application/json'
             },
-            body: JSON.stringify(props.count)
+            body: JSON.stringify(props.count),
+            signal: abortController.signal
             }).then(response => {
                 if (!response.ok) {
                     throw new Error('Error logging time');
                 }
                 console.log("Time logged successfully");
 
-                return fetch('/end_session')
+                return fetch('/end_session', {signal: abortController.signal})
             })
             .then(response => {
                 if (!response.ok) {
@@ -32,6 +34,7 @@ const Thankyou = (props) => {
             .catch(error => {
                 console.error('Error', error)
             });
+            return () => abortController.abort();
         }, []);
 
     return (

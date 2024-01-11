@@ -9,6 +9,7 @@ import Rewrite from './Rewrite';
 import Introduction from './Introduction';
 import React, {useState, useEffect} from 'react';
 
+
 const surveyPage = (body, nextRoute) => (
   <div className="App">
         <Header />
@@ -21,7 +22,6 @@ const surveyPage = (body, nextRoute) => (
       </div>
     </div>
 )
-
 
 function App() {
 
@@ -52,7 +52,8 @@ function App() {
   const [maxCases, setMaxCases] = useState(5);
 
   useEffect(() => {
-    fetch('/get_cases')
+    const abortController = new AbortController();
+    fetch('/get_cases', {signal: abortController.signal})
         .then(res => {
             if (!res.ok) {
                 throw new Error('Network response was not ok');
@@ -73,6 +74,7 @@ function App() {
         .catch(error => {
             console.error('Error fetching data:', error);
         });
+        return () => abortController.abort();
   }, []);
 
 
