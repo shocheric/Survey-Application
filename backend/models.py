@@ -4,7 +4,7 @@ from datetime import datetime
 
 db = SQLAlchemy()
 # define variable used to determine the number of cases to generate in the database
-max_cases = 15
+max_cases = 4
 
 # Table for storing the cases and their definitions, accessed via their case_id
 class CaseList(db.Model):

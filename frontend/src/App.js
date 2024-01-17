@@ -101,7 +101,7 @@ function App() {
 
   return <Routes>
     <Route exact path="/" element={surveyPage(boiler, "/survey")} />
-    <Route exact path="/survey" element={surveyPage(caseComponents[caseCount], caseCount===maxCases && "/rewrite")} />
+    <Route exact path="/survey" element={surveyPage(caseComponents[caseCount])} />
     <Route exact path="/rewrite" element={surveyPage(rewriteComponent, "/thankyou")} />
     <Route exact path="/thankyou" element={surveyPage(thankyou)} />
   </Routes>

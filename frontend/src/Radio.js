@@ -8,7 +8,7 @@ const Radio = (props) => {
     // on change handler to update users selection
     const onSelect = e => {
         setRating(e.target.value)
-        console.log("Rating changed to: " + e.target.value + "\nFor: " + e.target.name + "\nQuestion: " + props.questionNumber)
+        props.method(e.target.value)
     }
 
     var name;

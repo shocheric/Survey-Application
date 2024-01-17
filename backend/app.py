@@ -118,7 +118,7 @@ def input():
     # Case format: {case: case, u_rating: u-rating, s_rating: s-rating}
     # UserInput format: {rewrite_id: id, rewritten: bool, rewrite: string}
     print(response_data)
-
+    return jsonify({'Result': 'Input Success'})
     # Get the case_id of given case
     # case_id = get_case_id(case)
 
