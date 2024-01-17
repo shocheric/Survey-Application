@@ -111,14 +111,31 @@ def get_cases():
         return "Error returning cases"
 
 
-# defines a route for adding response information
-@app.route('/add_response', methods=['POST'])
-def add_response():
+# TODO: defines a route for adding response information. Handles: Case, Rewrite
+@app.route('/input', methods=['POST'])
+def input():
     response_data = request.get_json()
-    new_response = Input()
-    """complete"""
+    # Case format: {case: case, u_rating: u-rating, s_rating: s-rating}
+    # UserInput format: {rewrite_id: id, rewritten: bool, rewrite: string}
+    print(response_data)
+
+    # Get the case_id of given case
+    # case_id = get_case_id(case)
 
 
+    
+    # Check type value to see if case or rewrite
+    """Case Response Insertions: UserID(string), CaseID(string), Understandability rating(int), Severity rating(int)"""
+    # First check if case has already been inserted by given user. If so, update the value associated with it. 
+    #db_response = query_db("SELECT * FROM Ratings WHERE user_id = ? AND case_id = ?", (session["user"], ))
+    # If case not in db, create entry for it with given value
+
+    """Rewrite Response Insertions: User_id(string), Rewrite_id(string), Rewritten(bool), Rewrite(string), Date Completed (date)"""
+    # If Rewritten true, insert rewrite info into the UserInput table with current date
+
+
+
+# Logs time spent by users answering case questions
 @app.route('/log_time', methods=['POST'])
 def log_time():
     time_data = request.get_json()
@@ -156,6 +173,12 @@ with app.app_context():
             data = result.fetchall()
         return data
     
+
+# defines method to take the case and return case_id
+def get_case_id(case):
+    case_id = query_db("SELECT case_id FROM CaseList WHERE case = ?", case)
+    print(f"CASE_ID: {case_id}")
+    return case_id
 
 
 if __name__ == '__main__':

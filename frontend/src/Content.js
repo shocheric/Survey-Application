@@ -26,6 +26,10 @@ const Content = (props) => {
         }
     };
 
+    const handleSubmit = () => {
+        props.nextCase();
+    }
+
     
     
     return (
@@ -33,7 +37,7 @@ const Content = (props) => {
             <div className="card">
                 <h5 className="card-header">You will rate the understandability and severity of the following case:</h5>
                 <div className="card-body">
-                    <h5 className="card-text case"> {props.questionNumber + ".   "} {props.case ? '"'+props.case+'"' : "Loading..."} </h5>
+                    <h5 className="card-text case"> {props.questionNumber+". "} {props.case ? '"'+props.case+'"' : "Loading..."} </h5>
                     <p className="d-inline-flex gap-1">
                         <a onClick={handleClickDescription} className="btn btn-sm btn-light" data-bs-toggle="collapse" href={"#collapseDescription-"+props.questionNumber} role="button" aria-expanded="false" aria-controls={"collapseDescription-"+props.questionNumber}>
                             See Description
@@ -60,6 +64,7 @@ const Content = (props) => {
                             questionNumber={props.questionNumber}
                         />
                     </div>
+                    <button className='btn btn-large btn-primary submit-btn' onClick={handleSubmit}>Submit</button>
                 </div>
             </div>
         </main>

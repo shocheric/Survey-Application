@@ -83,10 +83,17 @@ function App() {
   const boiler = <Introduction />
   const thankyou = <Thankyou count={count}/>
   const caseComponents = [];
+
+  // Method for incrementing caseCount
+  const [caseCount, setCaseCount] = useState(0)
+  const nextCase = () => {
+    setCaseCount(caseCount+1)
+    console.log(caseCount)
+  }
   
   if (cases.length === maxCases && descriptions.length === maxCases) {
     for (let i=0; i<maxCases; i++) {
-      let newCase = <Content key={i} questionNumber={i+1} case={cases[i]} caseDescription={descriptions[i]}/>;
+      let newCase = <Content key={i} questionNumber={i+1} case={cases[i]} caseDescription={descriptions[i]} maxCases={maxCases} nextCase={nextCase}/>;
       caseComponents.push(newCase);
     }
   }
@@ -94,7 +101,7 @@ function App() {
 
   return <Routes>
     <Route exact path="/" element={surveyPage(boiler, "/survey")} />
-    <Route exact path="/survey" element={surveyPage(caseComponents, "/rewrite")} />
+    <Route exact path="/survey" element={surveyPage(caseComponents[caseCount], caseCount===maxCases && "/rewrite")} />
     <Route exact path="/rewrite" element={surveyPage(rewriteComponent, "/thankyou")} />
     <Route exact path="/thankyou" element={surveyPage(thankyou)} />
   </Routes>

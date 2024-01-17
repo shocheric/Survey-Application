@@ -46,6 +46,7 @@
 .Content .card {
   margin: 50px;
   margin-bottom: 70px;
+  padding-bottom: 20px;
 }
 
 .card {
@@ -155,6 +156,21 @@
   padding-bottom: 5px;
   font-weight: 600;
   margin-right: 15%;
+}
+
+.submit-btn {
+  background-color: #0E4181;
+  border-color: #0E4181;
+  color: white;
+  float: right;
+  font-size: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: 600;
+  margin-right: 3%;
+  margin-bottom: 20%;
 }
 
 .Body {
